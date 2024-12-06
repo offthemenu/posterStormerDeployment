@@ -18,9 +18,17 @@ You fire it up by running
 uvicorn backend.embeddingsFetch:app --reload
 '''
 
-load_dotenv() 
 app = FastAPI()
-mongodb_uri = os.getenv('Mongo_URI', 'mongodb://localhost:27017') #retrieve mongodb uri from .env file
+
+# Load environment variables
+ENV = os.getenv("ENV", "local")  # Default to 'local' if ENV is not set
+if ENV == "local":
+    load_dotenv()
+
+# MongoDB URI
+mongodb_uri = os.getenv("Mongo_URI")
+if not mongodb_uri:
+    raise ValueError("Mongo_URI environment variable is not set!")
 
 origins = [
     "http://localhost:3000",

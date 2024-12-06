@@ -51,7 +51,7 @@ function App() {
         isRetro: isRetroValue,
       });
       
-      const backendUrl = process.env.REACT_APP_BACKEND_URL;
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000"; // Use a fallback for development
       const response = await fetch(`${backendUrl}/generate_prompt`, {
         method: "POST",
         headers: {
