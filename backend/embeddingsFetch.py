@@ -20,7 +20,7 @@ uvicorn backend.embeddingsFetch:app --reload
 
 load_dotenv() 
 app = FastAPI()
-mongodb_uri = os.getenv('Mongo_URI') #retrieve mongodb uri from .env file
+mongodb_uri = os.getenv('Mongo_URI', 'mongodb://localhost:27017') #retrieve mongodb uri from .env file
 
 origins = [
     "http://localhost:3000",

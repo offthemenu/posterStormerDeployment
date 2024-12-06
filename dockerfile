@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y curl && \
 # Set the working directory
 WORKDIR /app
 
+# Copy the .env file early so it is available during the setup process
+COPY .env /app/.env
+
 # Backend setup
 COPY backend ./backend
 COPY requirements.txt ./ 
