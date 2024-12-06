@@ -23,7 +23,8 @@ app = FastAPI()
 mongodb_uri = os.getenv('Mongo_URI') #retrieve mongodb uri from .env file
 
 origins = [
-    "http://localhost:3000"  #give access to different IPs here
+    "http://localhost:3000",
+    "http://localhost:8080"   #give access to different IPs here
 ]
 
 app.add_middleware(

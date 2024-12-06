@@ -12,8 +12,8 @@ WORKDIR /app
 
 # Backend setup
 COPY backend ./backend
-COPY requirements.txt ./backend/
-RUN pip install --no-cache-dir -r backend/requirements.txt
+COPY requirements.txt ./ 
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Frontend setup
 COPY package*.json ./
