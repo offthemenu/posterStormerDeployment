@@ -24,7 +24,6 @@ RUN mkdir -p /etc/apt/sources.list.d && \
     apt-get update && apt-get install -y mongodb-org-shell && \
     rm -rf /var/lib/apt/lists/*
 
-
 # Install backend dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
@@ -47,6 +46,9 @@ COPY --from=frontend-builder /app/build /app/build
 COPY --from=backend-builder /app/backend /app/backend
 COPY --from=backend-builder /usr/local/lib/python3.9/site-packages /usr/local/lib/python3.9/site-packages
 COPY --from=backend-builder /usr/local/bin/uvicorn /usr/local/bin/uvicorn
+
+# Copy the MongoDB CLI binary from the backend-builder stage
+COPY --from=backend-builder /usr/bin/mongo /usr/bin/mongo
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
