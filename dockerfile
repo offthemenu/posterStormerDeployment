@@ -7,6 +7,12 @@ RUN apt-get update && apt-get install -y curl && \
     apt-get install -y nodejs && \
     npm install -g npm@latest
 
+# Install MongoDB CLI tools
+RUN curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add - && \
+    echo "deb [ arch=amd64 ] https://repo.mongodb.org/apt/debian buster/mongodb-org/6.0 main" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list && \
+    apt-get update && apt-get install -y mongodb-org-shell && \
+    rm -rf /var/lib/apt/lists/*
+
 # Set the working directory
 WORKDIR /app
 
@@ -22,7 +28,8 @@ COPY src ./src
 RUN npm install
 
 # Install Nginx
-RUN apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y apt-transport-https ca-certificates && \
+    apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf

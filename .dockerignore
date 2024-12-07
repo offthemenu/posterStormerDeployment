@@ -1,6 +1,0 @@
-# Exclude unnecessary files
-node_modules
-*.log
-
-# Include .env explicitly
-!.env

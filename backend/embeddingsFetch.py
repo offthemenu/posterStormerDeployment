@@ -114,6 +114,10 @@ def get_filtered_ids(query: MovieQuery):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during filtering: {str(e)}")
 
+@app.get("/")
+async def root():
+    return {"message": "Backend is running"}
+
 # Endpoint to find similar movies
 @app.post("/generate_prompt")
 async def generate_prompt(query: MovieQuery):

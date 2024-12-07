@@ -1,24 +1,12 @@
 version: "3.8"
 services:
-  backend:
+  app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: dockerfile  # Single Dockerfile for combined services
     ports:
-      - "8000:8000"
+      - "8080:8080"  # Map Nginx port to host
     env_file:
-      - .env
+      - .env  # Pass environment variables
     volumes:
-      - .:/app
-  frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports:
-      - "3000:3000"
-    depends_on:
-      - backend
-    env_file:
-      - .env
-    volumes:
-      - .:/app
+      - .:/app  # Mount the project directory for development

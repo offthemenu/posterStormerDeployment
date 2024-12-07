@@ -23,7 +23,7 @@ function AdditionalOptions({ setNumberOfPosters, onGenreChange, onStyleChange, o
           setGenres(cachedGenres);
         } else {
           // Fetch from API if no valid cache
-          const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000"; // Fallback for development
+          const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000"; // Fallback for development
           const response = await axios.get(`${backendUrl}/get_available_genres`);
           setGenres(response.data);
           if (response.data && response.data.length){ //sets the default genre to the first value in the genre array(which is Action)
