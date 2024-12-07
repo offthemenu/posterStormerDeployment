@@ -1,11 +1,21 @@
-# Use Python as the base image for the backend
-FROM python:3.9 AS base
+# Frontend build stage
+FROM node:18 AS frontend-builder
 
-# Install Node.js for the frontend in the same container
-RUN apt-get update && apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get install -y nodejs && \
-    npm install -g npm@latest
+WORKDIR /app
+
+# Copy only the package.json and package-lock.json for dependency installation
+COPY package*.json ./
+RUN npm install
+
+# Copy the React source code and build the app
+COPY public ./public
+COPY src ./src
+RUN npm run build
+
+# Backend build stage
+FROM python:3.9 AS backend-builder
+
+WORKDIR /app
 
 # Install MongoDB CLI tools
 RUN curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add - && \
@@ -13,32 +23,29 @@ RUN curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add -
     apt-get update && apt-get install -y mongodb-org-shell && \
     rm -rf /var/lib/apt/lists/*
 
-# Set the working directory
-WORKDIR /app
-
-# Backend setup
-COPY backend ./backend
-COPY requirements.txt ./ 
+# Install backend dependencies
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Frontend setup
-COPY package*.json ./
-COPY public ./public
-COPY src ./src
-RUN npm install
+# Copy backend code
+COPY backend ./backend
 
-# Build the React app
-RUN npm run build
+# Final production image
+FROM nginx:1.22 AS production
 
-# Install Nginx
-RUN apt-get update && apt-get install -y apt-transport-https ca-certificates && \
-    apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+# Copy React build files from frontend build stage
+COPY --from=frontend-builder /app/build /app/build
+
+# Copy backend code and dependencies from backend build stage
+COPY --from=backend-builder /app/backend /app/backend
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose Cloud Run's single external port
+# Expose the default Nginx port
 EXPOSE 8080
 
-# Use a process manager to start both backend and frontend
+# Use a process manager to start both backend and Nginx
 CMD ["sh", "-c", "uvicorn backend.embeddingsFetch:app --host 0.0.0.0 --port 8000 & nginx -g 'daemon off;'"]
