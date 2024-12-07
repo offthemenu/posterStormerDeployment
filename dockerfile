@@ -18,12 +18,10 @@ FROM python:3.9 AS backend-builder
 WORKDIR /app
 
 # Install MongoDB CLI tools
-RUN apt-get update && apt-get install -y gnupg wget && \
-    wget -qO- https://www.mongodb.org/static/pgp/server-6.0.asc | gpg --dearmor -o /usr/share/keyrings/mongodb-archive-keyring.gpg && \
-    echo "deb [ arch=amd64 signed-by=/usr/share/keyrings/mongodb-archive-keyring.gpg ] https://repo.mongodb.org/apt/debian bookworm/mongodb-org/6.0 main" > /etc/apt/sources.list.d/mongodb-org-6.0.list && \
-    apt-get update && apt-get install -y mongosh && \
-    rm -rf /var/lib/apt/lists/*
-
+RUN wget https://fastdl.mongodb.org/tools/db/mongodb-database-tools-debian10-x86_64-100.6.1.tgz && \
+    tar -zxvf mongodb-database-tools-debian10-x86_64-100.6.1.tgz && \
+    mv mongodb-database-tools-debian10-x86_64-100.6.1/bin/* /usr/bin/ && \
+    rm -rf mongodb-database-tools-debian10-x86_64-100.6.1.tgz mongodb-database-tools-debian10-x86_64-100.6.1
 
 # Install backend dependencies
 COPY requirements.txt .
