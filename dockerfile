@@ -28,8 +28,8 @@ RUN npm run build
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Environment variable setup for production
-ENV ENV=production
+# Copy the .env file for runtime access
+COPY .env /app/.env
 
 EXPOSE 8080
 CMD ["sh", "-c", "uvicorn backend.embeddingsFetch:app --host 0.0.0.0 --port 8000 & nginx -g 'daemon off;'"]
