@@ -27,6 +27,9 @@ COPY public ./public
 COPY src ./src
 RUN npm install
 
+# Build the React app
+RUN npm run build
+
 # Install Nginx
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates && \
     apt-get install -y nginx && rm -rf /var/lib/apt/lists/*
@@ -38,4 +41,4 @@ COPY nginx.conf /etc/nginx/nginx.conf
 EXPOSE 8080
 
 # Use a process manager to start both backend and frontend
-CMD ["sh", "-c", "uvicorn backend.embeddingsFetch:app --host 0.0.0.0 --port 8000 & npm start --prefix /app & nginx -g 'daemon off;'"]
+CMD ["sh", "-c", "uvicorn backend.embeddingsFetch:app --host 0.0.0.0 --port 8000 & nginx -g 'daemon off;'"]
