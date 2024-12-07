@@ -48,7 +48,7 @@ COPY --from=backend-builder /usr/local/lib/python3.9/site-packages /usr/local/li
 COPY --from=backend-builder /usr/local/bin/uvicorn /usr/local/bin/uvicorn
 
 # Copy the MongoDB CLI binary from the backend-builder stage
-COPY --from=backend-builder /usr/bin/mongo /usr/bin/mongo
+COPY --from=backend-builder /usr/bin/mongosh /usr/bin/mongosh
 
 # Copy Nginx configuration
 COPY nginx.conf /etc/nginx/nginx.conf
