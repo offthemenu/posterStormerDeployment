@@ -81,8 +81,7 @@ function App() {
         console.error("Error during API call:", error);
         return; // Exit early if there was an error during the API call
       }
-  
-      // Ensure `result` exists before accessing it
+      
       if (!result || !result.loadingUpdates) {
         console.warn("No updates available in the result.");
         return;
