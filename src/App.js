@@ -51,9 +51,10 @@ function App() {
         style: styleValue,
         isRetro: isRetroValue,
       });
-      
+  
       const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000/api"; // Use a fallback for development
-      
+      let result = null; // Declare result variable here so it's accessible outside the `try` block
+  
       try {
         const response = await fetch(`${backendUrl}/generate_prompt`, {
           method: "POST",
@@ -68,18 +69,25 @@ function App() {
             isRetro: isRetroValue,
           }),
         });
-      
+  
         if (!response.ok) {
           console.error("Failed to fetch prompt:", response.status, await response.text());
-          return;
+          return; // Exit early if the response is not OK
         }
-      
-        const result = await response.json();
+  
+        result = await response.json();
         console.log("Generated prompt data:", result);
       } catch (error) {
         console.error("Error during API call:", error);
+        return; // Exit early if there was an error during the API call
       }
-
+  
+      // Ensure `result` exists before accessing it
+      if (!result || !result.loadingUpdates) {
+        console.warn("No updates available in the result.");
+        return;
+      }
+  
       // Handle loading updates
       const updates = result.loadingUpdates || [];
       for (let i = 0; i < updates.length; i++) {
@@ -88,7 +96,7 @@ function App() {
           setLoadingPercentage(Math.min((i + 1) * (100 / updates.length), 100));
         }, i * 500); // Adjust delay for updates
       }
-
+  
       return result;
     } catch (error) {
       console.error("Error:", error);
