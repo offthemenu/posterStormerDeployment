@@ -35,7 +35,7 @@ if not mongodb_uri:
 
 origins = [
     "http://localhost:3000",
-    "http://localhost:8080",   #give access to different IPs here
+    "http://localhost:8080",
     "https://poster-stormer-backend-320432349353.us-central1.run.app",
     "https://poster-stormer-frontend-320432349353.us-central1.run.app"
 ]
