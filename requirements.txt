@@ -6,8 +6,6 @@ requests
 fastapi
 uvicorn
 pydantic
-torch 
-torchvision 
 pillow
 transformers
 diffusers

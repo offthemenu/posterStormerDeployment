@@ -1,0 +1,17 @@
+# Use a Python base image
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install backend dependencies
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copy backend code
+COPY backend ./backend
+
+# Expose backend port
+EXPOSE 8000
+
+# Start the FastAPI server
+CMD ["uvicorn", "backend.embeddingsFetch:app", "--host", "0.0.0.0", "--port", "8000"]
