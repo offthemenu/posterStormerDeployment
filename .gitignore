@@ -31,3 +31,6 @@ __pycache__/
 .env
 .vscode/
 public/assets/1x/posterStormer.zip
+
+
+ignored

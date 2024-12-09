@@ -1,6 +1,6 @@
-# Exclude unnecessary files
 node_modules
+.git
+build
+dist
 *.log
-
-# Include .env explicitly
-!.env
+.DS_Store

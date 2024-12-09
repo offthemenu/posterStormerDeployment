@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from typing import List, Optional
 import certifi
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.routing import APIRouter
 import logging
 
 
@@ -18,13 +19,25 @@ You fire it up by running
 uvicorn backend.embeddingsFetch:app --reload
 '''
 
-load_dotenv() 
 app = FastAPI()
-mongodb_uri = os.getenv('Mongo_URI', 'mongodb://localhost:27017') #retrieve mongodb uri from .env file
+
+api_router = APIRouter()
+
+# Load environment variables
+ENV = os.getenv("ENV", "local")  # Default to 'local' if ENV is not set
+if ENV == "local":
+    load_dotenv()
+
+# MongoDB URI
+mongodb_uri = os.getenv("Mongo_URI")
+if not mongodb_uri:
+    raise ValueError("Mongo_URI environment variable is not set!")
 
 origins = [
     "http://localhost:3000",
-    "http://localhost:8080"   #give access to different IPs here
+    "http://localhost:8080",
+    "https://poster-stormer-backend-320432349353.us-central1.run.app",
+    "https://poster-stormer-frontend-320432349353.us-central1.run.app"
 ]
 
 app.add_middleware(
@@ -105,8 +118,12 @@ def get_filtered_ids(query: MovieQuery):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error during filtering: {str(e)}")
 
+@api_router.get("/")
+async def root():
+    return {"message": "Backend is running"}
+
 # Endpoint to find similar movies
-@app.post("/generate_prompt")
+@api_router.post("/generate_prompt")
 async def generate_prompt(query: MovieQuery):
     
     print(f"Received Query: {query}")
@@ -205,7 +222,7 @@ async def generate_prompt(query: MovieQuery):
     return {"imdbIDs": top_n_ids, "movieTitles": top_movies_dict, "prompt": prompt}
     
     
-@app.get("/get_available_genres")
+@api_router.get("/get_available_genres")
 async def get_available_genres():
     '''This function will get all the values of unique genre values that can be found under the genres field and return them in a list'''
     
@@ -222,3 +239,6 @@ async def get_available_genres():
 
     # Convert the set to a sorted list and return it
     return sorted(unique_genres)
+
+# Include the router in the main app with `/api` prefix
+app.include_router(api_router, prefix="/api")
