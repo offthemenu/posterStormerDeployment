@@ -222,7 +222,7 @@ async def generate_prompt(query: MovieQuery):
     return {"imdbIDs": top_n_ids, "movieTitles": top_movies_dict, "prompt": prompt}
     
     
-@APIRouter.get("/get_available_genres")
+@api_router.get("/get_available_genres")
 async def get_available_genres():
     '''This function will get all the values of unique genre values that can be found under the genres field and return them in a list'''
     
