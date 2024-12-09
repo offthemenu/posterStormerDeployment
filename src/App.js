@@ -6,6 +6,7 @@ import AdditionalOptions from './Components/AdditionalOptions';
 import PosterDisplay from './Components/PosterDisplay';
 import { fal } from "@fal-ai/client";
 import TypingAnimation from './Components/TypingAnimation';
+import axios from 'axios';
 
 function App() {
   const [numberOfPosters, setNumberOfPosters] = useState(0);
@@ -51,7 +52,7 @@ function App() {
         isRetro: isRetroValue,
       });
       
-      const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://localhost:8000"; // Use a fallback for development
+      const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000/api"; // Use a fallback for development
       const response = await fetch(`${backendUrl}/generate_prompt`, {
         method: "POST",
         headers: {
