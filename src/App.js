@@ -53,6 +53,7 @@ function App() {
       });
       
       const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000/api"; // Use a fallback for development
+      
       try {
         const response = await fetch(`${backendUrl}/generate_prompt`, {
           method: "POST",
