@@ -53,24 +53,31 @@ function App() {
       });
       
       const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000/api"; // Use a fallback for development
-      const response = await fetch(`${backendUrl}/generate_prompt`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: titleValue,
-          plot: plotValue,
-          genre: genreValue,
-          style: styleValue,
-          isRetro: isRetroValue,
-        }),
-      });
-
-      if (!response.ok) throw new Error("Failed to get poster description");
-      const result = await response.json();
+      try {
+        const response = await fetch(`${backendUrl}/generate_prompt`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            title: titleValue,
+            plot: plotValue,
+            genre: genreValue,
+            style: styleValue,
+            isRetro: isRetroValue,
+          }),
+        });
       
-      console.log("Response from API:", result);
+        if (!response.ok) {
+          console.error("Failed to fetch prompt:", response.status, await response.text());
+          return;
+        }
+      
+        const result = await response.json();
+        console.log("Generated prompt data:", result);
+      } catch (error) {
+        console.error("Error during API call:", error);
+      }
 
       // Handle loading updates
       const updates = result.loadingUpdates || [];
@@ -248,7 +255,7 @@ function App() {
           boxShadow="lg" 
           w="full" 
           maxW="1200px" 
-          minH="1000px" 
+          minH="800px" 
           display="flex" 
           justifyContent="center" 
           alignItems="center"
