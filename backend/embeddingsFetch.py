@@ -10,6 +10,7 @@ from dotenv import load_dotenv
 from typing import List, Optional
 import certifi
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.routing import APIRouter
 import logging
 
 
@@ -119,7 +120,7 @@ async def root():
     return {"message": "Backend is running"}
 
 # Endpoint to find similar movies
-@app.post("/generate_prompt")
+@app.post("/api/generate_prompt")
 async def generate_prompt(query: MovieQuery):
     
     print(f"Received Query: {query}")
@@ -218,7 +219,7 @@ async def generate_prompt(query: MovieQuery):
     return {"imdbIDs": top_n_ids, "movieTitles": top_movies_dict, "prompt": prompt}
     
     
-@app.get("/get_available_genres")
+@app.get("/api/get_available_genres")
 async def get_available_genres():
     '''This function will get all the values of unique genre values that can be found under the genres field and return them in a list'''
     
