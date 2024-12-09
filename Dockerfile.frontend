@@ -7,6 +7,9 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
+# Set environment variable for React build
+ENV REACT_APP_BACKEND_URL=https://poster-stormer-backend-320432349353.us-central1.run.app/api
+
 # Copy React source code and build the app
 COPY public ./public
 COPY src ./src
