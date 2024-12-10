@@ -271,7 +271,7 @@ function App() {
           p={6} 
           borderRadius="md" 
           boxShadow="lg" 
-          w="full" 
+          w="100%" 
           maxW="1200px" 
           minH="300px" 
           display="flex" 
