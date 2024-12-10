@@ -223,7 +223,6 @@ function App() {
             <AdditionalOptions 
               onGenreChange={handleGenreChange}
               onStyleChange={handleStyleChange}
-              // onRetroChange={(value) => console.log(`Retro selected: ${value}`)}
               onRetroChange={handleRetroChange}
             />
             <Button
