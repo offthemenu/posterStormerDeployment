@@ -1,9 +1,10 @@
 import React from 'react';
 import './TopMoviesDisplay.css';
+import { Text } from '@chakra-ui/react';
 
 function TopMoviesDisplay({ titles }) {
     if (!titles || titles.length === 0) {
-        return <p>No similar movies yet. Please enter your prompt!</p>;
+        return <Text fontSize="lg" color="brand.darkGray">No similar movies yet. Please enter your prompt!</Text>;
     }
     else {
         return (
