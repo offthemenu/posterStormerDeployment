@@ -54,14 +54,25 @@ function App() {
         isRetro: isRetroValue,
       });
   
-      const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000/api"; // Use a fallback for development
-      let result = null; // Declare result variable here so it's accessible outside the `try` block
+      const backendUrl =
+        process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000/api"; // Use a fallback for development
+  
+      const FAL_KEY = process.env.REACT_APP_FAL_KEY; // Ensure this key is properly set in your environment
+  
+      if (!FAL_KEY) {
+        console.error("FAL_KEY is not defined. Check your environment variables.");
+        alert("Missing API Key. Please configure the environment properly.");
+        return;
+      }
+  
+      let result = null;
   
       try {
         const response = await fetch(`${backendUrl}/generate_prompt`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${FAL_KEY}`, // Include the authorization header
           },
           body: JSON.stringify({
             title: titleValue,
@@ -73,7 +84,14 @@ function App() {
         });
   
         if (!response.ok) {
-          console.error("Failed to fetch prompt:", response.status, await response.text());
+          const errorBody = await response.json();
+          console.error(
+            `Failed to fetch prompt: ${response.status} - ${response.statusText}`,
+            errorBody
+          );
+          alert(
+            `Failed to generate prompt: ${response.statusText}. Check logs for details.`
+          );
           return; // Exit early if the response is not OK
         }
   
@@ -81,15 +99,10 @@ function App() {
         console.log("Generated prompt data:", result);
       } catch (error) {
         console.error("Error during API call:", error);
+        alert("An error occurred while making the API call. Check the logs.");
         return; // Exit early if there was an error during the API call
       }
-
-      //The following code is not working yet, I have commented it out
-      // if (!result || !result.loadingUpdates) {
-      //   console.warn("No updates available in the result.");
-      //   return;
-      // } 
-
+  
       // Handle loading updates
       const updates = result.loadingUpdates || [];
       for (let i = 0; i < updates.length; i++) {
@@ -98,20 +111,23 @@ function App() {
           setLoadingPercentage(Math.min((i + 1) * (100 / updates.length), 100));
         }, i * 500); // Adjust delay for updates
       }
-
-      if(result && result.movieTitles){
-        const arrayOfTitlesAndDirectors = Object.entries(result.movieTitles).map(([title, director]) => ({
+  
+      if (result && result.movieTitles) {
+        const arrayOfTitlesAndDirectors = Object.entries(
+          result.movieTitles
+        ).map(([title, director]) => ({
           title,
-          director
+          director,
         }));
         setTitlesToDisplay(arrayOfTitlesAndDirectors);
       }
-      
+  
       return result;
     } catch (error) {
       console.error("Error:", error);
+      alert("An unexpected error occurred. Please try again.");
     }
-  };
+  };  
 
   const handleGenerate = async () => {
     setLoading(true);
