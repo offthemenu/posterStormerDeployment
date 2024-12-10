@@ -28,7 +28,10 @@ function PosterDisplay({ poster, posterRef }) {
           {poster.title && <Text mt={4} fontSize="xl">{poster.title}</Text>}
         </Box>
       ) : (
-        <Text fontSize="lg" color="brand.darkGray">No posters to display. Please generate some!</Text>
+        <Box textAlign="center">
+          <Text fontWeight="bold" fontSize="xl" color="white">No posters to display yet</Text>
+          <Text fontWeight="bold" fontSize="xl" color="white">Please generate some!</Text>
+        </Box> 
       )}
     </VStack>
   );

@@ -204,35 +204,56 @@ function App() {
       </Box>
 
       {/* Main Content */}
-      <VStack spacing={6} mt={8} px={6}>
+      <VStack spacing={6} mt={-12} px={6}>
         {/* Input Section */}
         <HStack
           spacing={8}
           align="stretch"
           w="full"
           maxW="1200px"
-          bg="rgba(256, 256, 256, 0.8)"
+          bg="transparent"
           p={6}
           borderRadius="md"
           boxShadow="lg"
         >
-          <Box bg="brand.lightGray" p={6} borderRadius="md" boxShadow="lg" w="full" maxW="800px">
+          <Box bg="transparent" p={6} borderRadius="md" boxShadow="lg" w="full" maxW="800px">
             <PromptInput onPlotChange={handlePlotChange} onTitleChange={handleTitleChange} />
           </Box>
-          <Box bg="brand.lightGray" p={6} borderRadius="md" boxShadow="lg" w="full" maxW="800px">
-            <AdditionalOptions 
+          <Box
+            bg="transparent"
+            p={6}
+            borderRadius="md"
+            boxShadow="lg"
+            w="30%"
+            maxW="800px"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {/* Add Descriptive Text */}
+            <Box mb={4}>
+              <Text fontSize="xl" fontWeight="semibold" color="white">
+                Customize Your Poster
+              </Text>
+              <Text fontSize="xs" color="gray.300">
+                Enhance your poster by selecting a movie genre, style, and retro theme.
+              </Text>
+            </Box>
+
+            <AdditionalOptions
               onGenreChange={handleGenreChange}
               onStyleChange={handleStyleChange}
               onRetroChange={handleRetroChange}
             />
-            <Button
-              mt={4}
-              colorScheme="red"
-              onClick={handleGenerate}
-              isDisabled={!titleValue || !plotValue}
-            >
-              Generate
-            </Button>
+              <Button
+                mt={4}
+                colorScheme="red"
+                onClick={handleGenerate}
+                isDisabled={!titleValue || !plotValue}
+              >
+                Generate
+              </Button>
           </Box>
         </HStack>
 
@@ -267,7 +288,7 @@ function App() {
 
         {/* Top Movies Display Section */}
         <Box 
-          bg="rgba(256, 256, 256, 0.8)" 
+          bg="transparent" 
           p={6} 
           borderRadius="md" 
           boxShadow="lg" 
@@ -286,7 +307,7 @@ function App() {
 
         {/* Poster Display Section */}
         <Box 
-          bg="rgba(256, 256, 256, 0.8)" 
+          bg="transparent" 
           p={6} 
           borderRadius="md" 
           boxShadow="lg" 
@@ -302,7 +323,7 @@ function App() {
             <>
               <Progress value={loadingPercentage} size="lg" colorScheme="red" />
               {/* <Text mt={4}>Generating Poster...</Text> */}
-              <Text mt={4}>Loading movies: {loadingMovies.join(", ")}</Text>
+              <Text fontWeight="bold" mt={4}>Loading movies... {loadingMovies.join(", ")}</Text>
             </>
           ) : (
             <PosterDisplay

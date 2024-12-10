@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Select, Box, Text, VStack } from "@chakra-ui/react";
+import { Select, Box, Text, VStack, HStack, Switch } from "@chakra-ui/react";
 import axios from "axios";
 
 function AdditionalOptions({ setNumberOfPosters, onGenreChange, onStyleChange, onRetroChange }) {
@@ -43,15 +43,15 @@ function AdditionalOptions({ setNumberOfPosters, onGenreChange, onStyleChange, o
 
   return (
     <VStack spacing={4} align="stretch">
-      <Box>
-        <Text fontSize="lg" mb={2} fontWeight="semibold" color="black">
-          Genre:
+      <HStack spacing={4} align="center">
+        <Text fontSize="lg" mb={2} fontWeight="semibold" color="white">
+          Genre
         </Text>
         <Select
-          placeholder="Select Genre"
+          placeholder="Select"
           onChange={(e) => onGenreChange(e.target.value)}
           focusBorderColor="brand.primary"
-          color="gray.700"
+          color="white"
         >
           {genres.map((genre) => (
             <option key={genre} value={genre}>
@@ -59,40 +59,38 @@ function AdditionalOptions({ setNumberOfPosters, onGenreChange, onStyleChange, o
             </option>
           ))}
         </Select>
-      </Box>
+      </HStack>
 
       {/* Poster Style Dropdown */}
-      <Box>
-        <Text fontSize="lg" mb={2} fontWeight="semibold" color="black">
-          Poster Style:
+      <HStack spacing={4} align="center">
+        <Text fontSize="lg" mb={2} fontWeight="semibold" color="white">
+          Style
         </Text>
         <Select
-          placeholder="Select Style"
+          placeholder="Select"
           onChange={(e) => onStyleChange(e.target.value)}
           focusBorderColor="brand.primary"
-          color="gray.700"
+          color="white"
         >
           <option value="3D Digital Art">3D Digital Art</option>
           <option value="Realistic Photography">Realistic Photography</option>
           <option value="Illustration (Animated)">Illustration (Animated)</option>
         </Select>
-      </Box>
+      </HStack>
 
-      {/* Make it Retro Dropdown */}
-      <Box>
-        <Text fontSize="lg" mb={2} fontWeight="semibold" color="black">
-          Make it Retro:
+      {/* Make it Retro Switch */}
+      <HStack spacing={4} align="center">
+        <Text fontSize="lg" mb={2} fontWeight="semibold" color="white">
+          Make it Retro
         </Text>
-        <Select
-          defaultValue="False"
-          onChange={(e) => onRetroChange(e.target.value)}
-          focusBorderColor="brand.primary"
-          color="gray.700"
-        >
-          <option value="False">No</option>
-          <option value="True">Yes</option>
-        </Select>
-      </Box>
+        <HStack>
+          <Switch
+            size="md"
+            colorScheme="red"
+            onChange={(e) => onRetroChange(e.target.checked ? "True" : "False")}
+          />
+        </HStack>
+      </HStack>
     </VStack>
   );
 }

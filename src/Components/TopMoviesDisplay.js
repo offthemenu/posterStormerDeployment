@@ -5,7 +5,7 @@ function TopMoviesDisplay({ titles }) {
   if (!titles || titles.length === 0) {
     return (
       <Box textAlign="center" mt={4}>
-        <Text fontSize="lg" color="brand.darkGray">
+        <Text fontWeight="bold" fontSize="lg" color="white">
           No similar movies yet. Please enter your prompt!
         </Text>
       </Box>
@@ -17,7 +17,7 @@ function TopMoviesDisplay({ titles }) {
         borderRadius="lg"
         p={4}
         mt={4}
-        bg="brand.lightGray"
+        bg="transparent"
         boxShadow="md"
         w="100%"
       >
@@ -25,7 +25,7 @@ function TopMoviesDisplay({ titles }) {
           fontSize="xl"
           fontWeight="bold"
           mb={4}
-          color="brand.darkGray"
+          color="white"
           fontFamily="heading"
           textAlign="center"
         >
@@ -45,10 +45,10 @@ function TopMoviesDisplay({ titles }) {
           <Tbody>
             {titles.map((movie, index) => (
               <Tr key={index}>
-                <Td textAlign="center" color="brand.darkGray" fontFamily="body">
+                <Td textAlign="center" color="white" fontFamily="body">
                   {movie.title}
                 </Td>
-                <Td textAlign="center" color="brand.darkGray" fontFamily="body">
+                <Td textAlign="center" color="white" fontFamily="body">
                   {movie.director}
                 </Td>
               </Tr>
