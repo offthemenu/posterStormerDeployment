@@ -4,6 +4,7 @@ import "./App.css";
 import PromptInput from './Components/PromptInput';
 import AdditionalOptions from './Components/AdditionalOptions';
 import PosterDisplay from './Components/PosterDisplay';
+import TopMoviesDisplay from './Components/TopMoviesDisplay';
 import { fal } from "@fal-ai/client";
 import TypingAnimation from './Components/TypingAnimation';
 import axios from 'axios';
@@ -11,6 +12,7 @@ import axios from 'axios';
 function App() {
   const [numberOfPosters, setNumberOfPosters] = useState(0);
   const [postersToDisplay, setPostersToDisplay] = useState([]);
+  const [titlesToDisplay, setTitlesToDisplay] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [plotValue, setPlotValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
@@ -81,12 +83,13 @@ function App() {
         console.error("Error during API call:", error);
         return; // Exit early if there was an error during the API call
       }
-      
-      if (!result || !result.loadingUpdates) {
-        console.warn("No updates available in the result.");
-        return;
-      }
-  
+
+      //The following code is not working yet, I have commented it out
+      // if (!result || !result.loadingUpdates) {
+      //   console.warn("No updates available in the result.");
+      //   return;
+      // } 
+
       // Handle loading updates
       const updates = result.loadingUpdates || [];
       for (let i = 0; i < updates.length; i++) {
@@ -95,7 +98,15 @@ function App() {
           setLoadingPercentage(Math.min((i + 1) * (100 / updates.length), 100));
         }, i * 500); // Adjust delay for updates
       }
-  
+
+      if(result && result.movieTitles){
+        const arrayOfTitlesAndDirectors = Object.entries(result.movieTitles).map(([title, director]) => ({
+          title,
+          director
+        }));
+        setTitlesToDisplay(arrayOfTitlesAndDirectors);
+      }
+      
       return result;
     } catch (error) {
       console.error("Error:", error);
@@ -254,6 +265,25 @@ function App() {
             )}
           </Box>
         )}
+
+        {/* Top Movies Display Section */}
+        <Box 
+          bg="rgba(256, 256, 256, 0.8)" 
+          p={6} 
+          borderRadius="md" 
+          boxShadow="lg" 
+          w="full" 
+          maxW="1200px" 
+          minH="300px" 
+          display="flex" 
+          justifyContent="center" 
+          alignItems="center"
+          position="relative"
+        >
+        <TopMoviesDisplay
+            titles={titlesToDisplay}
+          />
+        </Box>
 
         {/* Poster Display Section */}
         <Box 
