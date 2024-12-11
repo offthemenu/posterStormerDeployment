@@ -117,7 +117,6 @@ This will create an optimized production build in the `build` folder.
 `App.js` is the main component of the application. It handles the state, layout, and structure of the app.
 
 - **State Variables**:
-  - `numberOfPosters`: Tracks the number of posters requested by the user.
   - `postersToDisplay`: Stores the array of generated posters for display.
   - `currentIndex`: Tracks the currently displayed poster index.
   - `plotValue`: Stores the user's input for the movie plot.
