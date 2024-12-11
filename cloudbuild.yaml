@@ -15,10 +15,6 @@ steps:
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/frontend:$COMMIT_SHA']
 
-substitutions:
-  _REACT_APP_FAL_KEY: "71ff3a2a-cc06-499f-afbf-d603b8fdf737:42ee72e6fd9691f2e5ce630ac19bf3e7"
-  _REACT_APP_BACKEND_URL: "https://poster-stormer-backend-320432349353.us-central1.run.app/api"
-
 images:
   - 'gcr.io/$PROJECT_ID/frontend:$COMMIT_SHA'
 
