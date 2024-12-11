@@ -1,9 +1,34 @@
 # Poster Stormer
 
-**Poster Stormer** is a web application that generates movie posters based on user-input prompts. Using React for the frontend and FastAPI for the backend, the app allows users to specify genres, decades, and styles for poster generation. It dynamically recommends similar movie posters based on the user’s input.
+**Poster Stormer** is a web application that generates movie posters based on user-input prompts. Using React for the frontend and FastAPI for the backend, the app allows users to specify genres and styles for poster generation. It dynamically recommends similar movie posters based on the user’s input.
 
 ## Table of Contents
-
+1. [Getting Started](#getting-started)
+   - [Prerequisites](#prerequisites)
+   - [Installation](#installation)
+   - [Running the App](#running-the-app)
+2. [How to Use](#how-to-use)
+3. [Design Choices](#design-choices)
+   - [App Purpose and Functionality](#app-purpose-and-functionality)
+   - [User Interface Layout](#user-interface-layout)
+4. [Components](#components)
+   - [App.js](#appjs)
+   - [PromptInput](#promptinput)
+   - [AdditionalOptions](#additionaloptions)
+   - [PosterDisplay](#posterdisplay)
+   - [TypingAnimation](#typinganimation)
+5. [Backend API](#backend-api)
+   - [Overview](#overview)
+   - [Endpoints](#endpoints)
+     - [Root Endpoint](#root-endpoint)
+     - [Generate Prompt](#generate-prompt)
+     - [Get Available Genres](#get-available-genres)
+   - [Features and Logic](#features-and-logic)
+   - [Example Workflow](#example-workflow)
+6. [Deployment](#deployment)
+   - [Backend](#backend)
+   - [Frontend](#frontend)
+7. [Use of AI](#use-of-ai)
 
 ## Getting Started
 
