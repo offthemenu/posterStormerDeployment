@@ -12,25 +12,25 @@ function PromptInput({onPlotChange, onTitleChange}) {
   
   return (
     <Box>
-      <Text fontSize="lg" mb={2} fontWeight="semibold" color="black">
-          Title:
+      <Text fontSize="lg" mb={2} fontWeight="semibold" color="white">
+          Title
       </Text>
       <Input
         placeholder="Enter the Movie Title"
         mb={4}
         onChange={(e) => onTitleChange(e.target.value)}
         focusBorderColor="brand.primary"
-        color="gray.700"
+        color="brand.lighrGray"
       />
-      <Text fontSize="lg" mb={2} fontWeight="semibold" color="black">
-          Plot of Your Movie:
+      <Text fontSize="lg" mb={2} fontWeight="semibold" color="white">
+          Plot of Your Movie
       </Text>
       <Textarea
         placeholder="Enter the Plot of the Movie"
         rows={7}
         onChange={(e) => onPlotChange(e.target.value)}
         focusBorderColor="brand.primary"
-        color="gray.700"
+        color="brand.lighrGray"
       />
     </Box>
   );

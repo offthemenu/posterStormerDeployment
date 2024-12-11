@@ -4,6 +4,7 @@ import "./App.css";
 import PromptInput from './Components/PromptInput';
 import AdditionalOptions from './Components/AdditionalOptions';
 import PosterDisplay from './Components/PosterDisplay';
+import TopMoviesDisplay from './Components/TopMoviesDisplay';
 import { fal } from "@fal-ai/client";
 import TypingAnimation from './Components/TypingAnimation';
 import axios from 'axios';
@@ -11,6 +12,7 @@ import axios from 'axios';
 function App() {
   const [numberOfPosters, setNumberOfPosters] = useState(0);
   const [postersToDisplay, setPostersToDisplay] = useState([]);
+  const [titlesToDisplay, setTitlesToDisplay] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [plotValue, setPlotValue] = useState('');
   const [titleValue, setTitleValue] = useState('');
@@ -51,27 +53,56 @@ function App() {
         style: styleValue,
         isRetro: isRetroValue,
       });
-      
-      const backendUrl = process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000/api"; // Use a fallback for development
-      const response = await fetch(`${backendUrl}/generate_prompt`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title: titleValue,
-          plot: plotValue,
-          genre: genreValue,
-          style: styleValue,
-          isRetro: isRetroValue,
-        }),
-      });
-
-      if (!response.ok) throw new Error("Failed to get poster description");
-      const result = await response.json();
-      
-      console.log("Response from API:", result);
-
+  
+      const backendUrl =
+        process.env.REACT_APP_BACKEND_URL || "http://127.0.0.1:8000/api"; // Use a fallback for development
+  
+      const FAL_KEY = process.env.REACT_APP_FAL_KEY; // Ensure this key is properly set in your environment
+  
+      if (!FAL_KEY) {
+        console.error("FAL_KEY is not defined. Check your environment variables.");
+        alert("Missing API Key. Please configure the environment properly.");
+        return;
+      }
+  
+      let result = null;
+  
+      try {
+        const response = await fetch(`${backendUrl}/generate_prompt`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${FAL_KEY}`, // Include the authorization header
+          },
+          body: JSON.stringify({
+            title: titleValue,
+            plot: plotValue,
+            genre: genreValue,
+            style: styleValue,
+            isRetro: isRetroValue,
+          }),
+        });
+  
+        if (!response.ok) {
+          const errorBody = await response.json();
+          console.error(
+            `Failed to fetch prompt: ${response.status} - ${response.statusText}`,
+            errorBody
+          );
+          alert(
+            `Failed to generate prompt: ${response.statusText}. Check logs for details.`
+          );
+          return; // Exit early if the response is not OK
+        }
+  
+        result = await response.json();
+        console.log("Generated prompt data:", result);
+      } catch (error) {
+        console.error("Error during API call:", error);
+        alert("An error occurred while making the API call. Check the logs.");
+        return; // Exit early if there was an error during the API call
+      }
+  
       // Handle loading updates
       const updates = result.loadingUpdates || [];
       for (let i = 0; i < updates.length; i++) {
@@ -80,12 +111,23 @@ function App() {
           setLoadingPercentage(Math.min((i + 1) * (100 / updates.length), 100));
         }, i * 500); // Adjust delay for updates
       }
-
+  
+      if (result && result.movieTitles) {
+        const arrayOfTitlesAndDirectors = Object.entries(
+          result.movieTitles
+        ).map(([title, director]) => ({
+          title,
+          director,
+        }));
+        setTitlesToDisplay(arrayOfTitlesAndDirectors);
+      }
+  
       return result;
     } catch (error) {
       console.error("Error:", error);
+      alert("An unexpected error occurred. Please try again.");
     }
-  };
+  };  
 
   const handleGenerate = async () => {
     setLoading(true);
@@ -178,36 +220,56 @@ function App() {
       </Box>
 
       {/* Main Content */}
-      <VStack spacing={6} mt={8} px={6}>
+      <VStack spacing={6} mt={-12} px={6}>
         {/* Input Section */}
         <HStack
           spacing={8}
           align="stretch"
           w="full"
           maxW="1200px"
-          bg="rgba(256, 256, 256, 0.8)"
+          bg="transparent"
           p={6}
           borderRadius="md"
           boxShadow="lg"
         >
-          <Box bg="brand.lightGray" p={6} borderRadius="md" boxShadow="lg" w="full" maxW="800px">
+          <Box bg="transparent" p={6} borderRadius="md" boxShadow="lg" w="full" maxW="800px">
             <PromptInput onPlotChange={handlePlotChange} onTitleChange={handleTitleChange} />
           </Box>
-          <Box bg="brand.lightGray" p={6} borderRadius="md" boxShadow="lg" w="full" maxW="800px">
-            <AdditionalOptions 
+          <Box
+            bg="transparent"
+            p={6}
+            borderRadius="md"
+            boxShadow="lg"
+            w="30%"
+            maxW="800px"
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+          >
+            {/* Add Descriptive Text */}
+            <Box mb={4}>
+              <Text fontSize="xl" fontWeight="semibold" color="white">
+                Customize Your Poster
+              </Text>
+              <Text fontSize="xs" color="gray.300">
+                Enhance your poster by selecting a movie genre, style, and retro theme.
+              </Text>
+            </Box>
+
+            <AdditionalOptions
               onGenreChange={handleGenreChange}
               onStyleChange={handleStyleChange}
-              // onRetroChange={(value) => console.log(`Retro selected: ${value}`)}
               onRetroChange={handleRetroChange}
             />
-            <Button
-              mt={4}
-              colorScheme="red"
-              onClick={handleGenerate}
-              isDisabled={!titleValue || !plotValue}
-            >
-              Generate
-            </Button>
+              <Button
+                mt={4}
+                colorScheme="red"
+                onClick={handleGenerate}
+                isDisabled={!titleValue || !plotValue}
+              >
+                Generate
+              </Button>
           </Box>
         </HStack>
 
@@ -240,15 +302,34 @@ function App() {
           </Box>
         )}
 
+        {/* Top Movies Display Section */}
+        <Box 
+          bg="transparent" 
+          p={6} 
+          borderRadius="md" 
+          boxShadow="lg" 
+          w="100%" 
+          maxW="1200px" 
+          minH="300px" 
+          display="flex" 
+          justifyContent="center" 
+          alignItems="center"
+          position="relative"
+        >
+        <TopMoviesDisplay
+            titles={titlesToDisplay}
+          />
+        </Box>
+
         {/* Poster Display Section */}
         <Box 
-          bg="rgba(256, 256, 256, 0.8)" 
+          bg="transparent" 
           p={6} 
           borderRadius="md" 
           boxShadow="lg" 
           w="full" 
           maxW="1200px" 
-          minH="1000px" 
+          minH="800px" 
           display="flex" 
           justifyContent="center" 
           alignItems="center"
@@ -258,7 +339,7 @@ function App() {
             <>
               <Progress value={loadingPercentage} size="lg" colorScheme="red" />
               {/* <Text mt={4}>Generating Poster...</Text> */}
-              <Text mt={4}>Loading movies: {loadingMovies.join(", ")}</Text>
+              <Text fontWeight="bold" mt={4}>Loading movies... {loadingMovies.join(", ")}</Text>
             </>
           ) : (
             <PosterDisplay
@@ -293,3 +374,4 @@ function App() {
 }
 
 export default App;
+

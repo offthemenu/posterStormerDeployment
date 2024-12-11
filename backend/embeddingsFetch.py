@@ -42,7 +42,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -235,7 +235,10 @@ async def get_available_genres():
     # Iterate over each document to add genres to the set
     for document in cursor:
         genre = document.get("genre", [])
+        if genre == "N/A":
+            continue
         unique_genres.update(genre)  # Add each genre to the set
+        
 
     # Convert the set to a sorted list and return it
     return sorted(unique_genres)
