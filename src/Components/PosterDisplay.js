@@ -22,8 +22,8 @@ function PosterDisplay({ poster, posterRef }) {
             maxW="100%" // Adjust width to make the poster larger
             maxH="90vh" // Constrain height to avoid overflow
             objectFit="contain"
-            borderRadius="md" // Optional: Add rounded corners
-            boxShadow="xl" // Optional: Add a shadow for better aesthetics
+            borderRadius="md" // Add rounded corners
+            boxShadow="xl" // Add a shadow for better aesthetics
           />
           {poster.title && <Text mt={4} fontSize="xl">{poster.title}</Text>}
         </Box>
